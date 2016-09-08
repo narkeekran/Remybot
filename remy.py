@@ -2,13 +2,14 @@ import os
 import time
 from slackclient import SlackClient
 import praw
-
+import re
+import random
 
 #set remy's bot id and API id as a variable
 
-SLACK_BOT_TOKEN = "TOKEN-HOOO"
+SLACK_BOT_TOKEN = "xoxb-70506392340-UiZz2SrTpct1MgRtvpniaL9d"
 BOT_ID = "U22EWBJA0"
-PRAW = praw.Reddit(user_agent='Remybot by /u/narkeekran')
+PRAW = praw.Reddit(user_agent='Remy by /u/narkeekran')
 
 #string match for @'ing remy
 AT_BOT = "<@" + BOT_ID + ">"
@@ -17,13 +18,10 @@ AT_BOT = "<@" + BOT_ID + ">"
 slack_client = SlackClient(SLACK_BOT_TOKEN) 
 
 
-
-
-
+READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading
 
 
 if __name__ == "__main__":
-	READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading
 	if slack_client.rtm_connect():
 		slack_client.api_call("chat.postMessage", channel="#nsfwtest", text="TITTIES TIME", as_user=True )
 		print("Remy is connected and running!")
@@ -43,13 +41,21 @@ if __name__ == "__main__":
 							lower_message=message.lower()
 							if (lower_message.find("hello") != -1) or (lower_message.find("hi") != -1):
 								slack_client.rtm_send_message(channel, "Hello <@{}> ;)".format(user_id))
-							if lower_message.find("boobs") != -1:
-
-#								submissions = PRAW.get_subreddit('boobs').get_top(limit=25)
-#								for item in submissions:
-									
+							if lower_message.find("/r/") != -1:
+#								subreddit = re.findall('\/r\/\w+',lower_message)
+								NoRSub = re.findall('\w+',lower_message)
+								print(NoRSub[2])	
+#								print(subreddit)
+#								print(lower_message)
+#								url = "www.reddit.com" + subreddit[0]
+								responseNo = random.randint(1,25)
+								submissions = PRAW.get_subreddit(NoRSub[2]).get_top(limit=responseNo)
+								for item in submissions:
+									link = item.url
+										
+#								print(submissions)	
 								slack_client.rtm_send_message(channel, "<@{}>".format(user_id))
-								slack_client.api_call("chat.postMessage", channel=channel, text="http://i.imgur.com/JTOqbvG.jpg", as_user=True, unfurl_media=True) 
+								slack_client.api_call("chat.postMessage", channel=channel, text=link, as_user=True, unfurl_media=True) 
 			time.sleep(READ_WEBSOCKET_DELAY)
 	else:
 		print("Connection failed, invalid token?")
