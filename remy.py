@@ -42,14 +42,14 @@ if __name__ == "__main__":
 							if (lower_message.find("hello") != -1) or (lower_message.find("hi") != -1):
 								slack_client.rtm_send_message(channel, "Hello <@{}> ;)".format(user_id))
 							if lower_message.find("/r/") != -1:
-#								subreddit = re.findall('\/r\/\w+',lower_message)
-								NoRSub = re.findall('\w+',lower_message)
-								print(NoRSub[2])	
+								subreddit = re.findall('\/r\/\w+',lower_message)
+								NoRSub = re.findall('\w+',subreddit[0])
+								print(NoRSub[1])	
 #								print(subreddit)
 #								print(lower_message)
 #								url = "www.reddit.com" + subreddit[0]
 								responseNo = random.randint(1,25)
-								submissions = PRAW.get_subreddit(NoRSub[2]).get_top(limit=responseNo)
+								submissions = PRAW.get_subreddit(NoRSub[1]).get_top(limit=responseNo)
 								for item in submissions:
 									link = item.url
 										
