@@ -7,7 +7,7 @@ import random
 
 #set remy's bot id and API id as a variable
 
-SLACK_BOT_TOKEN = "tokenhoooo"
+SLACK_BOT_TOKEN = "TOKENBITCHES"
 BOT_ID = "U22EWBJA0"
 PRAW = praw.Reddit(user_agent='Remy by /u/narkeekran')
 
@@ -49,12 +49,22 @@ if __name__ == "__main__":
                                                                         for item in submissions:
                                                                                 link=item.url
                                                                                 title=item.title
-                                                                                print(item.url)
-                                                                                print(item.title)
                                                                         slack_client.rtm_send_message(channel, "<@{}>".format(user_id))
                                                                         slack_client.api_call("chat.postMessage", channel=channel, text='<' + link + '|' + title +'>', as_user=True, unfurl_media=True)
                                                                 except (praw.errors.InvalidSubreddit, praw.errors.Forbidden, praw.errors.NotFound):
                                                                         slack_client.api_call("chat.postMessage", channel=channel, text="WTF subreddit is that?", as_user=True, unfurl_media=True)
+							if lower_message.find("surprise me") != -1:
+								top=random.randint(1,100)
+								submissions = PRAW.get_subreddit("randnsfw").get_top(limit=top)
+								for item in submissions:
+									link=item.url
+									title=item.title
+									print(item.url)
+									print(item.title)
+								slack_client.rtm_send_message(channel, "<@{}>".format(user_id))
+								slack_client.api_call("chat.postMessage", channel=channel, text='<' + link + '|' + title +'>', as_user=True, unfurl_media=True)
+
+
 			time.sleep(READ_WEBSOCKET_DELAY)
 	else:
 		print("Connection failed, invalid token?")
