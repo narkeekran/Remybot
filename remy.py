@@ -7,7 +7,7 @@ import random
 
 #set remy's bot id and API id as a variable
 
-SLACK_BOT_TOKEN = "xoxb-70506392340-UiZz2SrTpct1MgRtvpniaL9d"
+SLACK_BOT_TOKEN = "tokenhoooo"
 BOT_ID = "U22EWBJA0"
 PRAW = praw.Reddit(user_agent='Remy by /u/narkeekran')
 
