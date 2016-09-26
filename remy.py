@@ -35,7 +35,7 @@ if __name__ == "__main__":
 					#if type == message save the actual message and the channel as variables
 						message=evt["text"]
 						if message.find(AT_BOT) != -1:
-							print(message)
+							#print(message)
 							channel=evt["channel"]
 							user_id=evt['user']
 							lower_message=message.lower()
@@ -43,17 +43,15 @@ if __name__ == "__main__":
 								slack_client.rtm_send_message(channel, "Hello <@{}> ;)".format(user_id))
 							if lower_message.find("/r/") != -1:
 								subreddit = re.findall('\/r\/\w+',lower_message)
-								NoRSub = re.findall('\w+',subreddit[0])
-								print(NoRSub[1])	
-#								print(subreddit)
-#								print(lower_message)
-#								url = "www.reddit.com" + subreddit[0]
-								responseNo = random.randint(1,25)
-								submissions = PRAW.get_subreddit(NoRSub[1]).get_top(limit=responseNo)
+								sub = re.findall('\w+',subreddit[0])
+								#print(subreddit)
+								#print(sub[1])
+								#print(lower_message)
+								top=random.randint(1,25)
+								submissions = PRAW.get_subreddit(sub[1]).get_top(limit=top)
 								for item in submissions:
-									link = item.url
-										
-#								print(submissions)	
+									#print(item.url)
+									link=item.url
 								slack_client.rtm_send_message(channel, "<@{}>".format(user_id))
 								slack_client.api_call("chat.postMessage", channel=channel, text=link, as_user=True, unfurl_media=True) 
 			time.sleep(READ_WEBSOCKET_DELAY)
