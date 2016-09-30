@@ -35,7 +35,6 @@ if __name__ == "__main__":
 					#if type == message save the actual message and the channel as variables
 						message=evt["text"]
 						if message.find(AT_BOT) != -1:
-							#print(message)
 							channel=evt["channel"]
 							user_id=evt['user']
 							lower_message=message.lower()
@@ -44,16 +43,15 @@ if __name__ == "__main__":
 							if lower_message.find("/r/") != -1:
 								subreddit = re.findall('\/r\/\w+',lower_message)
 								sub = re.findall('\w+',subreddit[0])
-								#print(subreddit)
-								#print(sub[1])
-								#print(lower_message)
 								top=random.randint(1,25)
-								submissions = PRAW.get_subreddit(sub[1]).get_top(limit=top)
-								for item in submissions:
-									#print(item.url)
-									link=item.url
-								slack_client.rtm_send_message(channel, "<@{}>".format(user_id))
-								slack_client.api_call("chat.postMessage", channel=channel, text=link, as_user=True, unfurl_media=True) 
+								try:
+									submissions = PRAW.get_subreddit(sub[1]).get_top(limit=top)
+									for item in submissions:
+										link=item.url
+									slack_client.rtm_send_message(channel, "<@{}>".format(user_id))
+									slack_client.api_call("chat.postMessage", channel=channel, text=link, as_user=True, unfurl_media=True) 
+								except praw.errors.InvalidSubreddit as e:
+									slack_client.api_call("chat.postMessage", channel=channel, text="I can't give you anything from a subreddit that doesn't exist", as_user=True, unfurl_media=True)
 			time.sleep(READ_WEBSOCKET_DELAY)
 	else:
 		print("Connection failed, invalid token?")
