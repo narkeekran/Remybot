@@ -18,8 +18,8 @@ PRAW = praw.Reddit(user_agent='Remy by /u/narkeekran')
 #string match for @'ing remy
 AT_BOT = "<@" + BOT_ID + ">"
 
-#inststantiate slack token 
-slack_client = SlackClient(SLACK_BOT_TOKEN) 
+#inststantiate slack token
+slack_client = SlackClient(SLACK_BOT_TOKEN)
 
 #help messege
 help_message =  ">>>I get images (mostly porn) from reddit! Try the following: \n */r/$subreddit* _for a random post from the top 50_ \n  *surprise me* _for a random image from a random NSFW subreddit_ \n"
@@ -29,7 +29,7 @@ READ_WEBSOCKET_DELAY = 1
 
 
 
-def help(channel, user_id): 
+def help(channel, user_id):
 	slack_client.api_call("chat.postMessage", channel=channel, text=help_message.format(user_id), as_user=True, unfurl_media=True)
 
 def version(channel, user_id):
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 		slack_client.api_call("chat.postMessage", channel="#nsfwtest", text="TITTIES TIME", as_user=True )
 		print("Remy is connected and running!")
 		while True:
-		#get read from slack	
+		#get read from slack
 			output = slack_client.rtm_read()
 			print(output)
 			for evt in output:
@@ -94,7 +94,7 @@ if __name__ == "__main__":
 							if lower_message.find("/r/") != -1:
 								top_post(channel, user_id, lower_message)
 							if lower_message.find("surprise me") != -1:
-								surprise_me(channel, user_id) 
+								surprise_me(channel, user_id)
 							if (lower_message.find("help") != -1) or (lower_message.find("halp") != -1) or (lower_message.find("i'm dumb") != -1):
 								help(channel, user_id)
 							if lower_message.find("version") != -1:
@@ -103,7 +103,3 @@ if __name__ == "__main__":
 			time.sleep(READ_WEBSOCKET_DELAY)
 	else:
 		print("Connection failed, invalid token?")
-
-
-
-	
