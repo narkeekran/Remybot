@@ -11,9 +11,12 @@ remy_version = "1.0"
 
 #set remy's bot id and API id as a variable
 
-SLACK_BOT_TOKEN = "TOKEN-HOOOO"
-BOT_ID = "ID"
-PRAW = praw.Reddit(user_agent='Remy by /u/narkeekran')
+SLACK_BOT_TOKEN = ""
+BOT_ID = ""
+RDT_client_id = ""
+RDT_client_secret = ""
+
+PRAW = praw.Reddit(client_id='',client_secret='', user_agent='Remy by /u/narkeekran')
 
 #string match for @'ing remy
 AT_BOT = "<@" + BOT_ID + ">"
@@ -37,7 +40,7 @@ def version(channel, user_id):
 
 def surprise_me(channel, user_id):
     top=random.randint(1,100)
-    submissions = PRAW.get_subreddit("randnsfw").get_top(limit=top)
+    submissions = PRAW.subreddit("randnsfw").top(limit=top)
     for item in submissions:
         link=item.url
         title=item.title
@@ -57,7 +60,7 @@ def top_post(channel, user_id, lower_message):
     link="" # set the link variable to nothing, this is so Remy can error out when a subreddit exists but doesn't give back links
     try:
         top=random.randint(1,100)
-        submissions = PRAW.get_subreddit(sub[1]).get_top(limit=top)
+        submissions = PRAW.subreddit(sub[1]).top(limit=top)
         for item in submissions:
             link=item.url
             title=item.title
@@ -68,7 +71,8 @@ def top_post(channel, user_id, lower_message):
             print("nothing here")
             slack_client.api_call("chat.postMessage", channel=channel, text="There's nothing there", as_user=True, unfurl_media=True)
 
-    except (praw.errors.InvalidSubreddit, praw.errors.Forbidden, praw.errors.NotFound):
+    #except (praw.errors.InvalidSubreddit, praw.errors.Forbidden, praw.errors.NotFound):
+    except:    
         slack_client.api_call("chat.postMessage", channel=channel, text="WTF subreddit is that?", as_user=True, unfurl_media=True)
 
 
