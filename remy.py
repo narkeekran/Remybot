@@ -36,16 +36,33 @@ def message_hello(message, say):
 
 @app.message("surprise me")
 def request(message, say):
-    sub=PRAW.random_subreddit(nsfw=1)    
+    sub=PRAW.random_subreddit(nsfw=1)
+    post=sub.random()
+
     say(
         blocks=[
             {
                 "type": "section",
-                "text": {"type": "mrkdwn", "text": "www.reddit.com/r/" + sub.display_name + ">" },
+                "text": {"type": "mrkdwn", "text": post.url },
             }
         ],
-        text=f""
+        text="www.reddit.com/r/" + sub.display_name
     )
+    say(
+        blocks=[
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": "www.reddit.com/r/" + sub.display_name },
+            }
+        ],
+        text="www.reddit.com/r/" + sub.display_name
+    )
+
+
+@app.event("message")
+def handle_message_events(body, logger):
+    logger.info(body)
+
 
 
 # Start your app
