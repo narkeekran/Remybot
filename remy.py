@@ -34,7 +34,7 @@ def message_hello(message, say):
         text=f"Hey there <@{message['user']}>!"
     )
 
-@app.message("hello")
+@app.message("surprise me")
 def request(message, say):
     sub=PRAW.random_subreddit(nsfw=1)
     post=sub.random()
