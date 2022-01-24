@@ -21,7 +21,7 @@ app = App(
 )
 
 # Listens to incoming messages that contain "hello"
-@app.message.lower(("hello"))
+@app.message(lower.("hello"))
 def message_hello(message, say):
     # say() sends a message to the channel where the event was triggered
     say(
@@ -34,7 +34,7 @@ def message_hello(message, say):
         text=f"Hey there <@{message['user']}>!"
     )
 
-@app.message.lower(("surprise me"))
+@app.message(lower.("hello"))
 def request(message, say):
     sub=PRAW.random_subreddit(nsfw=1)
     post=sub.random()
